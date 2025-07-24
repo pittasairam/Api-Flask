@@ -1,0 +1,47 @@
+name: CI 
+
+on:
+ workflow_dispatch
+
+env:
+  DOCKER_IMAGE: karthikamn/karhtikaimages
+  DOCKER_USERNAME: ${{vars.DOCKER_NAME}}
+  DOCKER_PASSWORD: ${{secrets.DOCKERPASSWORD}}
+
+jobs:
+ code-checkout:
+  runs-on: ubuntu-latest
+  steps: 
+   - name: Checkout
+     uses: actions/checkout@v4.2.2
+ sonarcloud:
+   needs: code-checkout
+   runs-on: ubuntu-latest
+   steps:  
+    - name: Analyze with SonarCloud
+      uses: codebeltnet/sonarcloud-scan@e96192d754f4e900db9414660d519c2ecb51777e
+      with:
+       projectKey: Api-Flask
+      env:
+       SONARTOKENCLOUD: ${{secrets.SONARTOKENCLOUD}}
+ build:
+  needs: [code-checkout, sonarcloud]
+  runs-on: ubuntu-latest
+  steps:  
+   - name: Docker Login
+     uses: docker/login-action@v3.4.0
+     with:
+      username: ${{env.DOCKER_USERNAME}}
+      password: ${{env.DOCKER_PASSWORD}}
+   - name: Build Docker Image
+     run: |
+      docker build -t ${{env.DOCKER_IMAGE}}:${{github.sha}}
+      docker tag $DOCKER_IMAGE:${{github.sha}} $DOCKER_IMAGE:latest
+   - name: Push the  Docker Image 
+     run: |
+      docker push $DOCKER_IMAGE:${{github.sha}}
+      docker push $DOCKER_IMAGE:latest
+   - name: Container created    
+     run: |
+      docker run -d $DOCKER_IMAGE:${{github.sha}} -p 5000:5000 $DOCKER_IMAGE:latest
+     
