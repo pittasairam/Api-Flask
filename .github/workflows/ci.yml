@@ -27,7 +27,7 @@ jobs:
       password: ${{env.DOCKER_PASSWORD}}
    - name: Build Docker Image
      run: |
-      docker build -t ${{env.DOCKER_IMAGE}}:${{github.sha}}
+      docker build -t ${{env.DOCKER_IMAGE}}:${{github.sha}} .
       docker tag $DOCKER_IMAGE:${{github.sha}} $DOCKER_IMAGE:latest
    - name: Push the  Docker Image 
      run: |
