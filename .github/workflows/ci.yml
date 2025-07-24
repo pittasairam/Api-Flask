@@ -24,6 +24,12 @@ jobs:
        projectKey: Api-Flask
       env:
        SONARTOKENCLOUD: ${{secrets.SONARTOKENCLOUD}}
+    - name: SonarQube Quality Gate Check
+      uses: SonarSource/sonarqube-quality-gate-action@v1.2.0
+      with:
+       pollingTimeoutSec: 5
+      
+     
  build:
   needs: [code-checkout, sonarcloud]
   runs-on: ubuntu-latest
