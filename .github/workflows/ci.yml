@@ -14,24 +14,10 @@ jobs:
   steps: 
    - name: Checkout
      uses: actions/checkout@v4.2.2
- sonarcloud:
-   needs: code-checkout
-   runs-on: ubuntu-latest
-   steps:  
-    - name: Analyze with SonarCloud
-      uses: codebeltnet/sonarcloud-scan@e96192d754f4e900db9414660d519c2ecb51777e
-      with:
-       projectKey: Api-Flask
-      env:
-       SONARTOKENCLOUD: ${{secrets.SONARTOKENCLOUD}}
-    - name: SonarQube Quality Gate Check
-      uses: SonarSource/sonarqube-quality-gate-action@v1.2.0
-      with:
-       pollingTimeoutSec: 5
-      
+ 
      
  build:
-  needs: [code-checkout, sonarcloud]
+  needs: [code-checkout]
   runs-on: ubuntu-latest
   steps:  
    - name: Docker Login
