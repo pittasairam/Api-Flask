@@ -9,9 +9,11 @@ on:
     branches:
       - main
 
+
+  
 jobs:
   build-and-scan:
-    runs-on: ubuntu-latest
+     runs-on: ubuntu-latest
 
     env:
       DOCKER_IMAGE: karthikamn/flask-api-python-app
