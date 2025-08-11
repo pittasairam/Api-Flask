@@ -9,7 +9,7 @@ env:
  DOCKER_IMAGE: karthikamn/my-python-api-flask
 jobs:
  build-using-docker:
-  runs-on: self-hosted
+  runs-on: ubuntu-latest
   steps:
    - name: Checkout code 
      uses: actions/checkout@v4.2.2
