@@ -22,3 +22,16 @@ jobs:
    - name: run-docker
      run: |
       docker run -d --name flask-python -p 5000:5000 $DOCKER_IMAGE:latest
+   - name: Setup Kubectl
+     uses: azure/setup-kubectl@v4
+     with:
+       version: latest
+   - name: Setup Minikube
+     run: |
+      minikube start
+      kubectl config use-context minikube
+   - name: Deployment k8s
+     run: |
+      kubetcl apply -f k8s/deployment.yml
+      kubectl apply -f k8s/service.yml
+      
